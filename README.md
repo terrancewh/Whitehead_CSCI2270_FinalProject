@@ -1,1 +1,3 @@
 # Whitehead_CSCI2270_FinalProject
+
+//This project is based on a continuation of the transmit message homework; instead of a linked list or transmitting a message, the basis of the project will be flights to and from all those locations. The two cheapest flights for all locations will be the basis of edges. Distances will be implemented as well; the project will be able to find the shortest path, cheapest path, second cheapest path, and longest path (for flier miles). Within each vertice, there will be doubly linked lists to represent the subway system, of which several functions will be avaliable in order to plan a trip.
