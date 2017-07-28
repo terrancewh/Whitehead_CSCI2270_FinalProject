@@ -17,4 +17,4 @@ Name:
 Terrance Whitehead
 
 Open issues/bugs:
-For some reason, trying to run the main.cpp, Graph.h, and Graph.cpp file together does not always work. I think it is the directories of my folder in codeblocks. If there are any issues, use the mainwithcppandh.cpp file and it will work!
+For some reason, trying to run the main.cpp, Graph.h, and Graph.cpp file together does not always work. I think it is the directories of my folder in codeblocks, so there should be no problem for other users. If there are any issues however, use the mainwithcppandh.cpp file and it will work. This file always runs for me.
