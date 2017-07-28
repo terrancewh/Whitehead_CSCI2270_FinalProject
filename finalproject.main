@@ -1,0 +1,346 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+
+using namespace std;
+
+struct City{
+    string cityName;
+    City *next;
+    City *previous;
+};
+
+template<class T>
+struct vertex;
+
+template<class T>
+struct adjVertex{
+    vertex<T> *v;
+    int time;
+    int price;
+};
+
+template<class T>
+struct vertex{
+    string location;
+    string citytitle;
+    vector<adjVertex<T> > adj;
+    bool solved;
+    int distance;
+    vertex *parent;
+};
+
+
+template<class T>
+class Graph
+{
+    public:
+        Graph();
+        ~Graph();
+        void addEdge(T loca1, T loca2, int weight1, int weight2);
+        void addVertex(T loca, T name);
+        void createGraph();
+        void displayGraph();
+        int search (T loca);
+        void DijkstraPrice(string start, string end);
+        void DijkstraTime(string start, string end);
+
+    protected:
+    private:
+        vector<vertex<T> > vertices;
+
+};
+
+
+// Start implementation of member objects
+template<class T>
+Graph<T>::Graph()
+{
+}
+
+template<class T>
+Graph<T>::~Graph()
+{
+}
+
+template<class T>
+void Graph<T>::addEdge(T loca1, T loca2, int weight1, int weight2){
+
+    for(int i = 0; i < vertices.size(); i++){
+        if(vertices[i].location == loca1){
+            for(int j = 0; j < vertices.size(); j++){
+                if(vertices[j].location == loca2 && i != j){
+                    adjVertex<T> av;
+                    av.v = &vertices[j];
+                    cout << av.v->location << endl;
+                    av.time = weight1;
+                    av.price=weight2;
+                    vertices[i].adj.push_back(av);
+                }
+            }
+        }
+    }
+}
+
+template<class T>
+void Graph<T>::addVertex(T loca, T name){
+    bool found = false;
+    for(int i = 0; i < vertices.size(); i++){
+        if(vertices[i].location == loca){
+            found = true;
+            cout<<vertices[i].location<<" found."<<endl;
+            break;
+        }
+    }
+    if(found == false){
+        vertex<T> v;
+        v.location = loca;
+        v.citytitle=name;
+        vertices.push_back(v);
+
+    }
+}
+
+template<class T>
+void Graph<T>::createGraph(){
+    addVertex("DEN","Denver, Colorado");
+    addVertex("ORD", "Chicago, Illinois");
+    addVertex("MSP", "Minneapolis, Minnesota");
+    addVertex("ATL", "Atlanta, Georgia");
+    addVertex("SFO", "San Francisco, California");
+    addVertex("LAX", "Los Angeles, California");
+    addVertex("JFK", "New York City, New York");
+    addVertex("LHR", "London, United Kingdom");
+    addVertex("ARN", "Stockholm, Sweden");
+    addVertex("CDG", "Paris, France");
+    addVertex("FRA", "Frankfurt, Germany");
+    addVertex("PRG", "Prague, Czech Republic");
+    addVertex("IST", "Istanbul, Turkey");
+    addVertex("TPE", "Taipei, Taiwan");
+    addVertex("DPS", "Bali, Indonesia");
+    addVertex("ICN", "Incheon, South Korea");
+    addVertex("HAN", "Hanoi, Vietnam");
+    addVertex("CAN", "Guangzhou, China");
+    addVertex("MEX", "Mexico City, Mexico");
+    addVertex("BOG", "Bogota, Colombia");
+    addVertex("REP", "Siem Reap, Cambodia");
+    addVertex("KTM", "Kathmandu, Nepal");
+    addVertex("HKT", "Phuket, Thailand");
+    addVertex("GIG", "Rio de Janeiro, Brazil");
+    addVertex("DEL", "New Delhi, India");
+    addVertex("SVO", "Moscow, Russia");
+    addVertex("HER", "Crete, Greece");
+    addVertex("CMN", "Casablanca, Morocco");
+    addVertex("FCO", "Fiumicino, Rome");
+    addVertex("KIA", "Kingston, Jamaica");
+    addEdge("DEN", "ORD", 156, 222);
+    addEdge("DEN", "MSP", 129, 159);
+    addEdge("DEN", "ATL", 184, 187);
+    addEdge("DEN", "SFO", 167, 163);
+    addEdge("DEN", "LAX", 150, 193);
+    addEdge("DEN", "JFK", 225, 342);
+    addEdge("ORD", "LHR", 526, 1455);
+    addEdge("ORD", "ARN", 640, 1418);
+    addEdge("ARN", "LHR", 360, 45);
+    addEdge("ARN", "CDG", 370, 84);
+    addEdge("ORD", "FRA", 700, 1226);
+    addEdge("FRA", "PRG", 174, 30);
+    addEdge("FRA", "IST", 127, 70);
+    addEdge("MSP", "FRA", 530, 1097);
+    addEdge("SFO", "TPE", 2108, 1194);
+    addEdge("TPE", "DPS", 1050, 109);
+    addEdge("SFO", "ICN", 2873, 2052);
+    addEdge("ICN", "HAN", 685, 1033);
+    addEdge("SFO", "CAN", 1153, 1081);
+    addEdge("SFO", "MEX", 255, 461);
+    addEdge("SFO", "BOG", 639, 574);
+    addEdge("LAX", "TPE", 1800, 891);
+    addEdge("LAX", "ICN", 1181, 1297);
+    addEdge("LAX", "BOG", 582, 704);
+    addEdge("LAX", "MEX", 579, 414);
+    addEdge("BOG", "GIG", 1215, 1728);
+    addEdge("LAX", "CAN", 1900, 854);
+    addEdge("CAN", "REP", 165, 244);
+    addEdge("CAN", "KTM", 425, 449);
+    addEdge("CAN", "HKT", 585, 297);
+    addEdge("ATL", "KIN", 484, 854);
+    addEdge("JFK", "DEL", 1335, 1151);
+    addEdge("JFK", "SVO", 685, 1003);
+    addEdge("JFK", "CMN", 589, 1053);
+    addEdge("CMN", "FCO", 435, 360);
+    addEdge("SVO", "HER", 1126, 605);
+}
+
+template<class T>
+void Graph<T>::displayGraph(){
+    //loop through all vertices and adjacent vertices
+    for(int i = 0; i < vertices.size(); i++){
+        cout<<vertices[i].location<<"-->" << endl;
+        for(int j = 0; j < vertices[i].adj.size(); j++){
+            cout<<vertices[i].adj[j].v->location<<"***" << endl;
+        }
+    }
+
+}
+
+template<class T>
+int Graph<T>::search(T loca){
+    for (int i=0; i<vertices.size(); i++){
+        vertices[i].solved=false;
+        vertices[i].distance=INT_MAX;
+        vertices[i].parent=nullptr;
+        if (vertices[i].location==loca){
+            return i;
+        }
+    }
+    return 0;
+}
+
+template<class T>
+void Graph<T>::DijkstraPrice(string start, string end){
+vertex<T> *startV=nullptr;
+vertex<T> *endV=nullptr;
+startV=&vertices[search(start)];
+endV=&vertices[search(end)];
+    if (startV!=nullptr && endV!=nullptr){
+        startV->solved = true;
+        startV->distance = 0;
+        vector<vertex<T> *> solved;
+        vector<vertex<T> *> path;
+        solved.push_back(startV);
+        adjVertex<T> *sadj;
+        vertex<T> *s;
+        vertex<T> *solvedV;
+        vertex<T> *prev;
+        while (endV->solved==false) {
+            int minDistance=INT_MAX;
+            for (int i=0; i<solved.size(); i++) {
+                s=solved[i];
+                for (int j=0; j<s->adj.size(); j++) {
+                    sadj=&solved[i]->adj[j];
+                    if (sadj->v->solved==false) {
+                        int dist=s->distance+sadj->price;
+                        if (dist<minDistance){
+                            minDistance=dist;
+                            solvedV=sadj->v;
+                            prev=s;
+                        }
+                    else{
+                        }
+                    }
+                    else{
+                    }
+                }
+            }
+            solved.push_back(solvedV);
+            solvedV->distance=minDistance;
+            solvedV->parent=prev;
+            solvedV->solved=true;
+        }
+        cout<<"Cheapest Path"<<endl;
+        vertex<T> *analysis=endV;
+        while (analysis!=nullptr) {
+            path.push_back(analysis);
+            analysis=analysis->parent;
+        }
+        for (int i=0; i<path.size(); i++) {
+            if (i==path.size()-1){
+                cout<<path[path.size()-1-i]->location;
+            }
+            else{
+                cout<<path[path.size()-1-i]->location<<" -> ";
+            }
+
+        }
+        cout<<endl;
+        cout<<"Minimum Cost: $"<<solved[solved.size()-1]->distance<<endl;
+    }
+    else if (endV!=nullptr){
+        return;
+    }
+    else{
+        return;
+    }
+}
+
+template<class T>
+void Graph<T>::DijkstraTime(string start, string end){
+vertex<T> *startV=nullptr;
+vertex<T> *endV=nullptr;
+startV=&vertices[search(start)];
+endV=&vertices[search(end)];
+    if (startV!=nullptr && endV!=nullptr){
+        startV->solved = true;
+        startV->distance = 0;
+        vector<vertex<T> *> solved;
+        vector<vertex<T> *> path;
+        solved.push_back(startV);
+        adjVertex<T> *sadj;
+        vertex<T> *s;
+        vertex<T> *solvedV;
+        vertex<T> *prev;
+        while (endV->solved==false) {
+            int minDistance=INT_MAX;
+            for (int i=0; i<solved.size(); i++) {
+                s=solved[i];
+                for (int j=0; j<s->adj.size(); j++) {
+                    sadj=&solved[i]->adj[j];
+                    if (sadj->v->solved==false) {
+                        int dist=s->distance+sadj->time;
+                        if (dist<minDistance){
+                            minDistance=dist;
+                            solvedV=sadj->v;
+                            prev=s;
+                        }
+                    else{
+                        }
+                    }
+                    else{
+                    }
+                }
+            }
+            solved.push_back(solvedV);
+            solvedV->distance=minDistance;
+            solvedV->parent=prev;
+            solvedV->solved=true;
+        }
+        cout<<"Fastest Path"<<endl;
+        vertex<T> *analysis=endV;
+        while (analysis!=nullptr) {
+            path.push_back(analysis);
+            analysis=analysis->parent;
+        }
+        for (int i=0; i<path.size(); i++) {
+            if (i==path.size()-1){
+                cout<<path[path.size()-1-i]->location;
+            }
+            else{
+                cout<<path[path.size()-1-i]->location<<" -> ";
+            }
+
+        }
+        cout<<endl;
+        int numMins=solved[solved.size()-1]->distance;
+        int dispHr=numMins/60;
+        int dispMin=numMins%60;
+        cout<<"Minimum Flight Time: "<< dispHr << "h " << dispMin << "m" << endl;
+    }
+    else if (endV!=nullptr){
+        return;
+    }
+    else{
+        return;
+    }
+}
+
+int main()
+{
+
+    Graph<string> g;
+    g.createGraph();
+    g.displayEdges();
+    g.DijkstraPrice("DEN","REP");
+    g.DijkstraTime("DEN","REP");
+
+    return 0;
+}
